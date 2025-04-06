@@ -1,4 +1,4 @@
-import { Handlers, PageProps as _PageProps } from "$fresh/server.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
 import { getPost as _getPost, getPosts, Post } from "../utils/posts.ts";
 
 export const handler: Handlers<Post[]> = {
@@ -7,7 +7,8 @@ export const handler: Handlers<Post[]> = {
     return ctx.render(posts);
   },
 };
-export default function BlogIndexPage(props: _PageProps<Post[]>) {
+
+export default function BlogIndexPage(props: PageProps<Post[]>) {
   const posts = props.data;
   return (
     <main class="max-w-screen-md px-4 pt-16 mx-auto">
