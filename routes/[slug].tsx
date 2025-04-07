@@ -1,7 +1,7 @@
 // deno-lint-ignore-file
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
-import { getPost, Post } from "/@/utils/posts.ts";
+import { getPost, Post } from "../utils/posts.ts";
 import { CSS, render } from "$gfm";
 
 export const handler: Handlers<Post> = {
