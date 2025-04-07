@@ -21,7 +21,8 @@
     "tailwindcss/": "npm:/tailwindcss@3.4.1/",
     "tailwindcss/plugin": "npm:/tailwindcss@3.4.1/plugin.js",
     "$std/": "https://deno.land/std@0.216.0/",
-    "$gfm": "https://deno.land/x/gfm@0.1.26/mod.ts"
+    "$gfm": "https://deno.land/x/gfm@0.1.26/mod.ts",
+    "path": "jsr:@std/path/posix.ts"
   },
   "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "nodeModulesDir": "auto"
