@@ -1,5 +1,5 @@
 import { extractYaml} from "jsr:@std/front-matter";
-import { join } from "jsr:@std/path/posix.ts";
+import { join } from "jsr:@std/path/mod.ts";
 
 const DIRECTORY = "./posts";
 
