@@ -3,6 +3,7 @@
 /// <reference lib="dom.iterable" />
 /// <reference lib="dom.asynciterable" />
 /// <reference lib="deno.ns" />
+// deno-lint-ignore-file no-unversioned-import
 
 import "jsr:@std/dotenv/load";
 import { start } from "$fresh/server.ts";
