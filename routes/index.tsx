@@ -1,25 +1,76 @@
-import { useSignal } from "@preact/signals";
-import Counter from "../islands/Counter.tsx";
+interface Post {
+  slug: string;
+  title: string;
+  publishedAt: Date;
+  content: string;
+  snippet: string;
+}
+import { Handlers } from "$fresh/server.ts";
 
-export default function Home() {
-  const count = useSignal(3);
+export const handler: Handlers<Post[]> = {
+  async GET(_req, ctx) {
+    const posts = await getPosts();
+    return ctx.render(posts);
+  },
+};
+async function getPosts(): Promise<Post[]> {
+  const files = Deno.readDir("./posts");
+  const promises = [];
+  for await (const file of files) {
+    const slug = file.name.replace(".md", "");
+    promises.push(getPost(slug));
+  }
+  const posts = await Promise.all(promises) as Post[];
+  posts.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
+  return posts;
+}
+// Importing two new std lib functions to help with parsing front matter and joining file paths.
+import { extract } from "@std/front-matter/any";
+import { join } from "https://deno.land/std@0.208.0/path/mod.ts";
+
+async function getPost(slug: string): Promise<Post | null> {
+  const text = await Deno.readTextFile(join("./posts", `${slug}.md`));
+  const { attrs, body } = extract<Post>(text);
+  return {
+    slug,
+    title: attrs.title,
+    publishedAt: new Date(attrs.publishedAt),
+    content: body,
+    snippet: attrs.snippet,
+  };
+}
+import { PageProps } from "$fresh/server.ts";
+
+export default function BlogIndexPage(props: PageProps<Post[]>) {
+  const posts = props.data;
   return (
-    <div class="px-4 py-8 mx-auto bg-[#86efac]">
-      <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-        <img
-          class="my-6"
-          src="/logo.svg"
-          width="128"
-          height="128"
-          alt="the Fresh logo: a sliced lemon dripping with juice"
-        />
-        <h1 class="text-4xl font-bold">Welcome to Fresh</h1>
-        <p class="my-4">
-          Try updating this message in the
-          <code class="mx-2">./routes/index.tsx</code> file, and refresh.
-        </p>
-        <Counter count={count} />
+    <main class="max-w-screen-md px-4 pt-16 mx-auto">
+      <h1 class="text-5xl font-bold">Blog</h1>
+      <div class="mt-8">
+        {posts.map((post) => <PostCard post={post} />)}
       </div>
+    </main>
+  );
+}
+function PostCard(props: { post: Post }) {
+  const { post } = props;
+  return (
+    <div class="py-8 border(t gray-200)">
+      <a class="sm:col-span-2" href={`/${post.slug}`}>
+        <h3 class="text(3xl gray-900) font-bold">
+          {post.title}
+        </h3>
+        <time class="text-gray-500">
+          {new Date(post.publishedAt).toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </time>
+        <div class="mt-4 text-gray-900">
+          {post.snippet}
+        </div>
+      </a>
     </div>
   );
 }

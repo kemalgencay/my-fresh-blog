@@ -21,6 +21,7 @@
     "**/_fresh/*"
   ],
   "imports": {
+    "@/": "./", "/": "./",
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
     "preact": "https://esm.sh/preact@10.22.0",
     "preact/": "https://esm.sh/preact@10.22.0/",
@@ -29,11 +30,13 @@
     "tailwindcss": "npm:tailwindcss@3.4.1",
     "tailwindcss/": "npm:/tailwindcss@3.4.1/",
     "tailwindcss/plugin": "npm:/tailwindcss@3.4.1/plugin.js",
-    "$std/": "https://deno.land/std@0.216.0/"
+    "@std/front-matter": "jsr:@std/front-matter@^1.0.9",
+    "@std/path": "https://deno.land/std@1.0.9/path/mod.ts",
+    "@std/dotenv": "jsr:@std/dotenv@^1.0.9"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
   },
-  "nodeModulesDir": true
+  "nodeModulesDir": "auto"
 }
